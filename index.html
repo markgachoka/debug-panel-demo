@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <title>Debug Panel | PEX Demo</title>
+
+    <link rel="stylesheet" href="reveal.js/dist/reset.css" />
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css" />
+    <link rel="stylesheet" href="reveal.js/dist/theme/black.css" />
+
+    <!-- Theme used for syntax highlighted code -->
+    <link
+      rel="stylesheet"
+      href="reveal.js/plugin/highlight/zenburn.css"
+    />
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <div>
+            <h4>Debug Panel</h4>
+            <p>
+              <small>
+                In the context of <b><u>feed-ios-testapp</u></b>
+              </small>
+            </p>
+          </div>
+        </section>
+        <section>
+          <h4>Why?</h4>
+          <p>
+            When testing <u>experiments</u>, we have to make code changes to
+            test if what we're working on has the desired effect.
+          </p>
+        </section>
+        <section>
+          <h4>Debug Panel🎊</h4>
+          <p>
+            An easy to use interface (similar to Feature Flags in OM) which we
+            can use to turn flights and experiments on/off.
+          </p>
+        </section>
+        <section>
+          <h4>How to access the debug panel</h4>
+          <p>
+            An easy to use interface (similar to Feature Flags in OM) which we
+            can use to turn flights and experiments on/off.
+          </p>
+        </section>
+        <section>
+          <h4>Pros & Cons</h4>
+          <table>
+            <th>
+              <td>Pro</td>
+              <td>Con</td>
+            </th>
+            <tr>
+              <td></td>
+              <td>Quick testing of experiments and flights</td>
+              <td>Have to remember initial set up</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </section>
+        <section>
+          <h4>Recipe</h4>
+          <p>Step 1: Add your new experiment to <a href="https://office.visualstudio.com/Office/_git/1JS?path=%2Fmidgard%2Fpackages%2Ffeed-data-graphql%2Fsrc%2FreactiveVars%2Fexperiments.ts&version=GBmain&line=15&lineEnd=16&lineStartColumn=1&lineEndColumn=1&lineStyle=plain&_a=contents" target="_blank" rel="noopener noreferrer">experiments</a></p>
+          <pre><code data-line-numbers="4-10">
+  export const experiments: Experiment[] = [
+  ...
+  {
+    section: "OutlookMobileHomeL2",
+    experiments: [
+      "OutlookMobileHomeL2WithSharedLinksClose",
+      "OutlookMobileWithPeopleInsights",
+    ],
+  },
+  ...
+];
+          </code></pre>
+        </section>
+        <section>
+          <h4>Recipe Cont...</h4>
+          Step 2: Configure query to use <u>enabled experiments</u> when in Dev environment. Otherwise, use experiments from host app</p>
+          <pre>
+            <code data-line-numbers="6-9|10">
+const { data } = useQuery(query, {
+  ...
+  variables: {
+    ...
+    experiments: 
+      props.slot && __DEV__ && experimentsConfig
+      ? getEnabledExperiments(props.slot,experimentsConfig)
+      : props.experiments,
+    // experiments: props.experiments,
+    },
+    ...
+});
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h4>Recipe Cont...</h4>
+          Step 3: Toggle on/off 💡
+          <p><img data-src="debug_panel.png" height="500"></p>
+        </section>
+        <section>
+          <h4>Video Demo</h4>
+          <a hre>Stream</a>
+        </section>
+      </div>
+    </div>
+
+    <script src="reveal.js/dist/reveal.js"></script>
+    <script src="reveal.js/plugin/notes/notes.js"></script>
+    <script src="reveal.js/plugin/markdown/markdown.js"></script>
+    <script src="reveal.js/plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+      });
+    </script>
+  </body>
+</html>
